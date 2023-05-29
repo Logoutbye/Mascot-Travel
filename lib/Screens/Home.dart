@@ -120,7 +120,11 @@ class _HomeState extends State<Home> {
             : Stack(
                 children: [
                   WebView(
+<<<<<<< HEAD
                     initialUrl: 'https://eob.qpo.mybluehost.me/',
+=======
+                    initialUrl: 'https://heyjinni.com/',
+>>>>>>> 3535cf9cf6515b7201d5cc7428ea7d3d1fd3d4f9
                     javascriptMode: JavascriptMode.unrestricted,
                     onWebViewCreated: (WebViewController webViewController) {
                       _webViewController.complete(webViewController);
@@ -138,8 +142,12 @@ class _HomeState extends State<Home> {
                           })
                     },
                     navigationDelegate: (NavigationRequest request) {
+<<<<<<< HEAD
                       if (request.url
                           .startsWith('https://eob.qpo.mybluehost.me')) {
+=======
+                      if (request.url.startsWith('https://heyjinni.com/')) {
+>>>>>>> 3535cf9cf6515b7201d5cc7428ea7d3d1fd3d4f9
                         return NavigationDecision.navigate;
                       } else if (request.url
                           .startsWith('https://www.youtube.com/')) {
@@ -149,9 +157,15 @@ class _HomeState extends State<Home> {
                         print('opening external link');
                         _launchExternalUrl(request.url);
                         // launchUrl(Uri.parse(request.url));
+<<<<<<< HEAD
                       }
                       print('allowing navigation to $request');
                       return NavigationDecision.navigate;
+=======
+                        return NavigationDecision.prevent;
+                      }
+                      print('allowing navigation to $request');
+>>>>>>> 3535cf9cf6515b7201d5cc7428ea7d3d1fd3d4f9
                     },
                     onProgress: (int progress) {
                       print("WebView is loading (progress : $progress%)");
@@ -193,7 +207,11 @@ class _HomeState extends State<Home> {
                               color: MyColors.kprimaryColor, fontSize: 40),
                         ),
                         progressColor: MyColors.kprimaryColor,
+<<<<<<< HEAD
                         backgroundColor: MyColors.kprimaryshade,
+=======
+                        backgroundColor: Color.fromARGB(255, 104, 204, 247),
+>>>>>>> 3535cf9cf6515b7201d5cc7428ea7d3d1fd3d4f9
                         circularStrokeCap: CircularStrokeCap.round,
                       ),
                     ),
