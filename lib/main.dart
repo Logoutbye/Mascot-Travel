@@ -85,7 +85,7 @@ Future<void> fetchData() async {
     _button4link = button4Data.link;
 
     // Do something with the retrieved data
-    print('New Button 1 Label: ${_button1label}');
+    print('New Button 1 Label: ${_button1link}');
     print('Button 1 Label: ${button1Data.label}');
     print('Button 1 Link: ${button1Data.link}');
 
