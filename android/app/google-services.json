@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "930986537244",
+    "project_id": "mascot-travel",
+    "storage_bucket": "mascot-travel.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:930986537244:android:3a54ec95a8004a4c06cad9",
+        "android_client_info": {
+          "package_name": "com.mascottravel"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNkjyx3a6xckANZcd9ECRlhXq2xA8OTuE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

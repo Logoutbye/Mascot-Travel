@@ -1,10 +1,23 @@
 import 'package:ezeehome_webview/Contrlller/InternetConnectivity.dart';
-import 'package:ezeehome_webview/Screens/Home.dart';
+import 'package:ezeehome_webview/Screens/bottom_navigation_bar.dart';
+import 'package:ezeehome_webview/constants.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // firebase intialization
+  await Firebase.initializeApp();
+
   await checkInternetConnectionForDashboard();
+
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    systemNavigationBarColor: MyColors.kprimaryshade,
+    statusBarColor: MyColors.kprimaryshade,
+  ));
+
   runApp(MyApp());
 }
 
@@ -30,10 +43,13 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Mascot Travel',
         theme: ThemeData(
-          primarySwatch: Colors.purple,
+          primarySwatch: Colors.pink,
         ),
-        home: Home(
-          isInternetConnected: isInternetConnected,
-        ));
+        home: FirstScreen(isInternetConnected: isInternetConnected)
+
+        //  Home(
+        //   isInternetConnected: isInternetConnected,
+        // )
+        );
   }
 }
