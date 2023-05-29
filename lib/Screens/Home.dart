@@ -12,9 +12,11 @@ class Home extends StatefulWidget {
   Home({
     super.key,
     required this.isInternetConnected,
+    required this.link,
   }) {}
 
   bool isInternetConnected;
+  String? link;
   @override
   State<Home> createState() => _HomeState();
 }
@@ -32,6 +34,7 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
+    print('object${widget.link}');
     checkInternetConnectionForDashboard();
     if (Platform.isAndroid) {
       WebView.platform = SurfaceAndroidWebView();
@@ -69,6 +72,7 @@ class _HomeState extends State<Home> {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => Home(
                         isInternetConnected: IsInternetConnected,
+                        link: widget.link,
                       ),
                     ));
                   });
@@ -106,6 +110,7 @@ class _HomeState extends State<Home> {
                               Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => Home(
                                   isInternetConnected: IsInternetConnected,
+                                  link: widget.link,
                                 ),
                               ));
                             },
@@ -120,7 +125,7 @@ class _HomeState extends State<Home> {
             : Stack(
                 children: [
                   WebView(
-                    initialUrl: 'https://eob.qpo.mybluehost.me/',
+                    initialUrl: widget.link,
                     javascriptMode: JavascriptMode.unrestricted,
                     onWebViewCreated: (WebViewController webViewController) {
                       _webViewController.complete(webViewController);
@@ -139,7 +144,7 @@ class _HomeState extends State<Home> {
                     },
                     navigationDelegate: (NavigationRequest request) {
                       if (request.url
-                          .startsWith('https://eob.qpo.mybluehost.me')) {
+                          .startsWith('${widget.link}')) {
                         return NavigationDecision.navigate;
                       } else if (request.url
                           .startsWith('https://www.youtube.com/')) {

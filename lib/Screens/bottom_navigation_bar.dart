@@ -60,17 +60,22 @@ class _FirstScreenState extends State<FirstScreen> {
     _button4link = widget.button4link;
 
     fetchData();
+        alpha();
+
     // TODO: implement initState
     super.initState();
   }
 
   var index = 0;
-  final screen = [
-    Home(isInternetConnected: isInternetConnected),
-    Home(isInternetConnected: isInternetConnected),
-    Home(isInternetConnected: isInternetConnected),
-    Home(isInternetConnected: isInternetConnected)
-  ];
+  var screen ;
+  void alpha(){
+    screen = [
+    Home(isInternetConnected: isInternetConnected,link: '$_button1link',),
+    Home(isInternetConnected: isInternetConnected,link: '$_button2link',),
+    Home(isInternetConnected: isInternetConnected,link: '$_button3link',),
+    Home(isInternetConnected: isInternetConnected,link: '$_button4link',)
+    ];
+  }
   // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
@@ -133,66 +138,6 @@ class _FirstScreenState extends State<FirstScreen> {
       ),
     );
   }
-
-  // Future<ButtonData> getButtonData(String documentId) async {
-  //   try {
-  //     DocumentSnapshot documentSnapshot =
-  //         await _firestore.collection('App Urls').doc(documentId).get();
-
-  //     var data = documentSnapshot.data() as Map<String, dynamic>;
-
-  //     // Create a new instance of ButtonData using the data from the document
-  //     ButtonData buttonData = ButtonData(
-  //       link: data['url'] as String,
-  //       label: data['label'] as String,
-  //     );
-
-  //     return buttonData;
-  //   } catch (e) {
-  //     // Handle any errors that occur during the process
-  //     print('Error: $e');
-  //     return ButtonData(link: '', label: '');
-  //   }
-  // }
-
-  // Future<void> fetchData() async {
-  //   try {
-  //     ButtonData button1Data = await getButtonData('Button1');
-  //     ButtonData button2Data = await getButtonData('Button2');
-  //     ButtonData button3Data = await getButtonData('Button3');
-  //     ButtonData button4Data = await getButtonData('Button4');
-
-  //     _button1label = button1Data.label;
-  //     _button1link = button1Data.link;
-
-  //     _button2label = button2Data.label;
-  //     _button2link = button2Data.link;
-
-  //     _button3label = button3Data.label;
-  //     _button3link = button3Data.link;
-
-  //     _button4label = button4Data.label;
-  //     _button4link = button4Data.link;
-
-  //     // Do something with the retrieved data
-  //     print('New Button 1 Label: ${_button1label}');
-  //     print('Button 1 Label: ${button1Data.label}');
-  //     print('Button 1 Link: ${button1Data.link}');
-
-  //     print('Button 2 Label: ${button2Data.label}');
-  //     print('Button 2 Link: ${button2Data.link}');
-
-  //     print('Button 2 Label: ${button3Data.label}');
-  //     print('Button 2 Link: ${button3Data.link}');
-
-  //     print('Button 2 Label: ${button4Data.label}');
-  //     print('Button 2 Link: ${button4Data.link}');
-  //   } catch (e) {
-  //     // Handle any errors that occur during the process
-  //     print('Error: $e');
-  //   }
-  // }
-
 }
 
 class ButtonData {
