@@ -8,8 +8,8 @@ import 'package:flutter_webview_pro/webview_flutter.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Home extends StatefulWidget {
-  Home({
+class Screen2 extends StatefulWidget {
+  Screen2({
     super.key,
     required this.isInternetConnected,
     required this.link,
@@ -18,10 +18,10 @@ class Home extends StatefulWidget {
   bool isInternetConnected;
   String? link;
   @override
-  State<Home> createState() => _HomeState();
+  State<Screen2> createState() => _Screen2State();
 }
 
-class _HomeState extends State<Home> {
+class _Screen2State extends State<Screen2> {
   var IsInternetConnected = true;
   bool loader = false;
   // final Completer<WebViewController> _controller =
@@ -68,13 +68,7 @@ class _HomeState extends State<Home> {
             ? RefreshIndicator(
                 onRefresh: () {
                   return Future.delayed(Duration(seconds: 1), () {
-                    Navigator.pop(context);
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => Home(
-                        isInternetConnected: IsInternetConnected,
-                        link: widget.link,
-                      ),
-                    ));
+                    refresh();
                   });
                 },
                 child: SingleChildScrollView(
@@ -91,38 +85,42 @@ class _HomeState extends State<Home> {
                             color: MyColors.kprimaryColor,
                           ),
                           Container(
-                            child: Text(
-                              'No Internet Connection',
-                              style: TextStyle(
-                                fontSize: 18,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: MyColors.kprimaryColor,
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context);
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => Home(
-                                  isInternetConnected: IsInternetConnected,
-                                  link: widget.link,
+                            child: Column(
+                              children: [
+                                Text(
+                                  'No Internet Connection',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ),
                                 ),
-                              ));
-                            },
-                            child: Text('Reload Page'),
+                                Text(
+                                  'swipe down to refresh',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
+                          // SizedBox(
+                          //   height: 20,
+                          // ),
+                          // ElevatedButton(
+                          //   style: ElevatedButton.styleFrom(
+                          //     backgroundColor: MyColors.kprimaryColor,
+                          //   ),
+                          //   onPressed: () {
+                          //     refresh();
+                          //   },
+                          //   child: Text('Reload Page'),
+                          // ),
                         ],
                       ),
                     ),
                   ),
                 ),
               )
-            : Stack(
+            :  Stack(
                 children: [
                   WebView(
                     initialUrl: widget.link,
@@ -143,8 +141,7 @@ class _HomeState extends State<Home> {
                           })
                     },
                     navigationDelegate: (NavigationRequest request) {
-                      if (request.url
-                          .startsWith('${widget.link}')) {
+                      if (request.url.startsWith('${widget.link}')) {
                         return NavigationDecision.navigate;
                       } else if (request.url
                           .startsWith('https://www.youtube.com/')) {
@@ -210,12 +207,19 @@ class _HomeState extends State<Home> {
     );
   }
 
-   Future<void> _launchExternalUrl(String url) async {
+  Future<void> _launchExternalUrl(String url) async {
     if (await canLaunch(url)) {
       await launch(url, forceSafariVC: false, forceWebView: false);
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  void refresh() {
+    setState(() {
+      IsInternetConnected = true;
+    });
+    checkInternetConnectionForDashboard();
   }
 
   checkInternetConnectionForDashboard() async {
@@ -226,33 +230,14 @@ class _HomeState extends State<Home> {
       setState(() {
         IsInternetConnected = false;
         loader = true;
+        print('//////////// Failed to Refresh');
       });
     } else {
       setState(() {
         loader = true;
         IsInternetConnected = true;
+        print('Successful');
       });
     }
   }
-
-  // void requestPermissions() async {
-  //   Map<Permission, PermissionStatus> statuses = await [
-  //     Permission.camera,
-  //     Permission.storage,
-  //     Permission.microphone,
-  //     Permission.phone,
-  //   ].request();
-
-  //   if (statuses[Permission.camera]!.isGranted &&
-  //       statuses[Permission.storage]!.isGranted &&
-  //       statuses[Permission.microphone]!.isGranted &&
-  //       statuses[Permission.phone]!.isGranted) {
-  //     // All permissions granted, proceed with the functionality.
-  //     print('All permissions granted!');
-  //   } else {
-  //     // Permissions not granted, handle accordingly.
-  //     print('Some or all permissions not granted!');
-  //   }
-  // }
-
 }

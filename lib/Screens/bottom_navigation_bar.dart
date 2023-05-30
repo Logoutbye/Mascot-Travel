@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ezeehome_webview/Screens/Home.dart';
+import 'package:ezeehome_webview/Screens/screen1.dart';
+import 'package:ezeehome_webview/Screens/Screen4.dart';
+import 'package:ezeehome_webview/Screens/screen2.dart';
+import 'package:ezeehome_webview/Screens/screen3.dart';
 import 'package:ezeehome_webview/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -60,22 +63,35 @@ class _FirstScreenState extends State<FirstScreen> {
     _button4link = widget.button4link;
 
     fetchData();
-        alpha();
+    alpha();
 
     // TODO: implement initState
     super.initState();
   }
 
   var index = 0;
-  var screen ;
-  void alpha(){
+  var screen;
+  void alpha() {
     screen = [
-    Home(isInternetConnected: isInternetConnected,link: '$_button1link',),
-    Home(isInternetConnected: isInternetConnected,link: '$_button2link',),
-    Home(isInternetConnected: isInternetConnected,link: '$_button3link',),
-    Home(isInternetConnected: isInternetConnected,link: '$_button4link',)
+      Screen1(
+        isInternetConnected: isInternetConnected,
+        link: '$_button1link',
+      ),
+      Screen2(
+        isInternetConnected: isInternetConnected,
+        link: '$_button2link',
+      ),
+      Screen3(
+        isInternetConnected: isInternetConnected,
+        link: '$_button3link',
+      ),
+      Screen4(
+        isInternetConnected: isInternetConnected,
+        link: '$_button4link',
+      ),
     ];
   }
+
   // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
