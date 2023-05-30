@@ -96,12 +96,22 @@ class _FirstScreenState extends State<FirstScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(0),
+        child: AppBar(
+          backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+          elevation: 0,
+        ),
+      ),
       body: screen[index],
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
+          height: MediaQuery.of(context).size.height/15,
           indicatorColor: MyColors.kprimaryColor,
         ),
         child: NavigationBar(
+          
             backgroundColor: MyColors.kprimaryshade,
             selectedIndex: index,
             labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
@@ -119,7 +129,7 @@ class _FirstScreenState extends State<FirstScreen> {
                     Icons.home_filled,
                     color: MyColors.kprimaryshade,
                   ),
-                  label: '$_button1label'),
+                  label: '$_button1label',),
               NavigationDestination(
                   icon: Icon(
                     Icons.chat_bubble_outline,
@@ -131,6 +141,7 @@ class _FirstScreenState extends State<FirstScreen> {
                   ),
                   label: '$_button2label'),
               NavigationDestination(
+                
                   icon: Icon(
                     Icons.info_outline,
                     color: MyColors.kprimaryColor,

@@ -5,7 +5,7 @@ import 'package:ezeehome_webview/Contrlller/InternetConnectivity.dart';
 import 'package:ezeehome_webview/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_pro/webview_flutter.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Screen3 extends StatefulWidget {
@@ -140,22 +140,22 @@ class _Screen3State extends State<Screen3> {
                                 .showSnackBar(snackBar);
                           })
                     },
-                    navigationDelegate: (NavigationRequest request) {
-                      if (request.url
-                          .startsWith('${widget.link}')) {
-                        return NavigationDecision.navigate;
-                      } else if (request.url
-                          .startsWith('https://www.youtube.com/')) {
-                        print('blocking navigation to $request}');
-                        return NavigationDecision.prevent;
-                      } else {
-                        print('opening external link');
-                        _launchExternalUrl(request.url);
-                        // launchUrl(Uri.parse(request.url));
-                      }
-                      print('allowing navigation to $request');
-                      return NavigationDecision.navigate;
-                    },
+                    // navigationDelegate: (NavigationRequest request) {
+                    //   if (request.url
+                    //       .startsWith('${widget.link}')) {
+                    //     return NavigationDecision.navigate;
+                    //   } else if (request.url
+                    //       .startsWith('https://www.youtube.com/')) {
+                    //     print('blocking navigation to $request}');
+                    //     return NavigationDecision.prevent;
+                    //   } else {
+                    //     print('opening external link');
+                    //     _launchExternalUrl(request.url);
+                    //     // launchUrl(Uri.parse(request.url));
+                    //   }
+                    //   print('allowing navigation to $request');
+                    //   return NavigationDecision.navigate;
+                    // },
                     onProgress: (int progress) {
                       print("WebView is loading (progress : $progress%)");
                       setState(() {
@@ -186,19 +186,21 @@ class _Screen3State extends State<Screen3> {
                     visible:
                         _isLoading, // Show the progress indicator only when loading
                     child: Center(
-                      child: CircularPercentIndicator(
-                        radius: 80.0,
-                        lineWidth: 15.0,
-                        percent: _progress,
-                        center: new Text(
-                          "$_progressText%",
-                          style: TextStyle(
-                              color: MyColors.kprimaryColor, fontSize: 40),
-                        ),
-                        progressColor: MyColors.kprimaryColor,
-                        backgroundColor: MyColors.kprimaryshade,
-                        circularStrokeCap: CircularStrokeCap.round,
-                      ),
+                      child: Lottie.asset('assets/animations/loading.json',height: MediaQuery.of(context).size.height/6),
+
+                      //  CircularPercentIndicator(
+                      //   radius: 80.0,
+                      //   lineWidth: 15.0,
+                      //   percent: _progress,
+                      //   center: new Text(
+                      //     "$_progressText%",
+                      //     style: TextStyle(
+                      //         color: MyColors.kprimaryColor, fontSize: 40),
+                      //   ),
+                      //   progressColor: MyColors.kprimaryColor,
+                      //   backgroundColor: MyColors.kprimaryshade,
+                      //   circularStrokeCap: CircularStrokeCap.round,
+                      // ),
                     ),
                     //  CircularProgressIndicator(value: _progress),
                   ),
@@ -208,13 +210,13 @@ class _Screen3State extends State<Screen3> {
     );
   }
 
-   Future<void> _launchExternalUrl(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url, forceSafariVC: false, forceWebView: false);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
+  //  Future<void> _launchExternalUrl(String url) async {
+  //   if (await canLaunch(url)) {
+  //     await launch(url, forceSafariVC: false, forceWebView: false);
+  //   } else {
+  //     throw 'Could not launch $url';
+  //   }
+  // }
 
    void refresh() {
     setState(() {

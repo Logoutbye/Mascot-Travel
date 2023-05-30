@@ -14,10 +14,10 @@ void main() async {
 
   await checkInternetConnectionForDashboard();
 
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    systemNavigationBarColor: MyColors.kprimaryshade,
-    statusBarColor: MyColors.kprimaryshade,
-  ));
+  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  //   systemNavigationBarColor: MyColors.kprimaryshade,
+  //   statusBarColor: MyColors.kprimaryshade,
+  // ));
   await fetchData();
   runApp(MyApp());
 }
@@ -113,7 +113,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Mascot Travel',
         theme: ThemeData(
-          primarySwatch: Colors.pink,
+          primarySwatch: Colors.blue,
         ),
         home: FirstScreen(
           isInternetConnected: isInternetConnected,
