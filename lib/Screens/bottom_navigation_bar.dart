@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ezeehome_webview/Screens/build_sheet_for_book_now.dart';
-import 'package:ezeehome_webview/Screens/reloadableScreeen.dart';
 import 'package:ezeehome_webview/Screens/screen1.dart';
 import 'package:ezeehome_webview/Screens/Screen4.dart';
 import 'package:ezeehome_webview/Screens/screen2.dart';
@@ -98,7 +97,6 @@ class _FirstScreenState extends State<FirstScreen> {
   var IsInternetConnected = true;
 
   var _selectedLink;
-  late Screen3Reloadable screen3Reloadable;
 
   var _index;
   @override
@@ -128,10 +126,7 @@ class _FirstScreenState extends State<FirstScreen> {
     print('check${_selectedLink}');
     // fetchData();
     alpha();
-    screen3Reloadable = Screen3Reloadable(
-      isInternetConnected: isInternetConnected,
-      // initialLink: _selectedLink,
-    );
+
     // TODO: implement initState
     super.initState();
   }
@@ -269,12 +264,11 @@ class _FirstScreenState extends State<FirstScreen> {
                 title: Text('${MyStaticVariable.BookNowButton1label}'),
                 onTap: () {
                   setState(() {
-                      //Screen3Reloadable screen3Reloadable;
-                      screen3Reloadable.updateLink('newLink');
-                    MyStaticVariable.setData(4, 5);
                     Navigator.pop(context);
-                    khan(context);
-
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => FirstScreen(
+                            isInternetConnected: isInternetConnected)));
+                    MyStaticVariable.setData(5, 5);
                   });
                 },
               ),
@@ -378,16 +372,6 @@ class _FirstScreenState extends State<FirstScreen> {
           ),
         );
       },
-    );
-  }
-
-    @override
-  Widget khan(BuildContext context) {
-    print('idrees rebuild');
-
-    return Screen4(
-      isInternetConnected: widget.isInternetConnected, link: '${MyStaticVariable.BookNowButton1link}',
-      // link: currentLink,
     );
   }
 }

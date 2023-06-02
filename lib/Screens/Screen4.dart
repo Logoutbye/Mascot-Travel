@@ -37,8 +37,6 @@ class _Screen4State extends State<Screen4> {
 
   @override
   void initState() {
-        print('idrees rebuild 2');
-
     staticLink = MyStaticVariable.previousScreenIndex == 0
         ? '${MyStaticVariable.button1link}'
         : MyStaticVariable.previousScreenIndex == 1
@@ -48,9 +46,8 @@ class _Screen4State extends State<Screen4> {
                 : MyStaticVariable.previousScreenIndex == 4
                     ? '${MyStaticVariable.button5link}'
                     : '';
-    print(
-        "i am rebuild agian: ${MyStaticVariable.currentScreenIndex} Previous: ${MyStaticVariable.previousScreenIndex}");
-    // print('stataic::${staticLink} selected ${widget.link}');
+
+                    print('stataic::${staticLink} selected ${widget.link}');
     checkInternetConnectionForDashboard();
     if (Platform.isAndroid) {
       WebView.platform = SurfaceAndroidWebView();
@@ -58,17 +55,9 @@ class _Screen4State extends State<Screen4> {
     // requestPermissions();
     super.initState();
   }
-  void updateLink(String newLink) {
-    setState(() {
-      widget.link = MyStaticVariable.currentScreenIndex == 5
-          ? MyStaticVariable.BookNowButton1link
-          : MyStaticVariable.BookNowButton2link;
-    });
-  }
+
   @override
   Widget build(BuildContext context) {
-    print(
-        "i am rebuild agian: ${MyStaticVariable.currentScreenIndex} Previous: ${MyStaticVariable.previousScreenIndex}");
     return WillPopScope(
       onWillPop: () async {
         bool? goBack =
@@ -148,9 +137,7 @@ class _Screen4State extends State<Screen4> {
                 children: [
                   WebView(
                     initialUrl:
-                        // widget.link == 'null' ?
-                        // staticLink,
-                    widget.link,
+                        widget.link == 'null' ? staticLink : widget.link,
                     javascriptMode: JavascriptMode.unrestricted,
                     onWebViewCreated: (WebViewController webViewController) {
                       _webViewController.complete(webViewController);
@@ -247,8 +234,6 @@ class _Screen4State extends State<Screen4> {
   //     throw 'Could not launch $url';
   //   }
   // }
-
-
 
   void refresh() {
     setState(() {
