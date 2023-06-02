@@ -93,27 +93,27 @@ class _Screen2State extends State<Screen2> {
                                     fontSize: 18,
                                   ),
                                 ),
-                                Text(
-                                  'swipe down to refresh',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
+                                // Text(
+                                //   'swipe down to refresh',
+                                //   style: TextStyle(
+                                //     fontSize: 18,
+                                //   ),
+                                // ),
                               ],
                             ),
                           ),
-                          // SizedBox(
-                          //   height: 20,
-                          // ),
-                          // ElevatedButton(
-                          //   style: ElevatedButton.styleFrom(
-                          //     backgroundColor: MyColors.kprimaryColor,
-                          //   ),
-                          //   onPressed: () {
-                          //     refresh();
-                          //   },
-                          //   child: Text('Reload Page'),
-                          // ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: MyColors.kprimaryColor,
+                            ),
+                            onPressed: () {
+                              refresh();
+                            },
+                            child: Text('Reload Page'),
+                          ),
                         ],
                       ),
                     ),
@@ -121,8 +121,11 @@ class _Screen2State extends State<Screen2> {
                 ),
               )
             :  Stack(
+              
                 children: [
+                  
                   WebView(
+                    
                     initialUrl: widget.link,
                     javascriptMode: JavascriptMode.unrestricted,
                     onWebViewCreated: (WebViewController webViewController) {
@@ -185,7 +188,9 @@ class _Screen2State extends State<Screen2> {
                     visible:
                         _isLoading, // Show the progress indicator only when loading
                     child: Center(
-                      child: Lottie.asset('assets/animations/loading.json',height: MediaQuery.of(context).size.height/6),
+                      child: Lottie.asset('assets/animations/loading.json',
+                      width: MediaQuery.of(context).size.width/1
+                      ),
 
                       //  CircularPercentIndicator(
                       //   radius: 80.0,

@@ -57,7 +57,8 @@ class _Screen3State extends State<Screen3> {
         }
       },
       child: Scaffold(
-        appBar: PreferredSize(
+        appBar: 
+        PreferredSize(
           preferredSize: Size.fromHeight(0),
           child: AppBar(
             backgroundColor: MyColors.kprimaryColor,
@@ -93,27 +94,27 @@ class _Screen3State extends State<Screen3> {
                                     fontSize: 18,
                                   ),
                                 ),
-                                Text(
-                                  'swipe down to refresh',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
+                                // Text(
+                                //   'swipe down to refresh',
+                                //   style: TextStyle(
+                                //     fontSize: 18,
+                                //   ),
+                                // ),
                               ],
                             ),
                           ),
-                          // SizedBox(
-                          //   height: 20,
-                          // ),
-                          // ElevatedButton(
-                          //   style: ElevatedButton.styleFrom(
-                          //     backgroundColor: MyColors.kprimaryColor,
-                          //   ),
-                          //   onPressed: () {
-                          //     refresh();
-                          //   },
-                          //   child: Text('Reload Page'),
-                          // ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: MyColors.kprimaryColor,
+                            ),
+                            onPressed: () {
+                              refresh();
+                            },
+                            child: Text('Reload Page'),
+                          ),
                         ],
                       ),
                     ),
@@ -159,7 +160,7 @@ class _Screen3State extends State<Screen3> {
                     onProgress: (int progress) {
                       print("WebView is loading (progress : $progress%)");
                       setState(() {
-                        _progress = progress / 100;
+                        _progress = progress / 30;
                         _progressText = progress;
                         // Update progress based on the value received (0-100)
                       });

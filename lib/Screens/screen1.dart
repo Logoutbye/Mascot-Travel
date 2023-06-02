@@ -31,7 +31,9 @@ class _Screen1State extends State<Screen1> {
   double _progress = 0.0; // Variable to hold the progress percentage
   bool _isLoading = true;
 
-  int _progressText = 0; // Variable to track loading state
+  int _progressText = 0;
+
+  late WebViewController webViewController; // Variable to track loading state
 
   @override
   void initState() {
@@ -59,7 +61,29 @@ class _Screen1State extends State<Screen1> {
         }
       },
       child: Scaffold(
-        appBar: PreferredSize(
+        appBar: 
+        // PreferredSize(
+        //   preferredSize: Size.fromHeight(31),
+        //   child: AppBar(
+        //     backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        //     foregroundColor: Colors.black,
+        //     elevation: 0,
+        //     actions: [
+        //       Padding(
+        //         padding: const EdgeInsets
+        //             // .fromLTRB(8, 0, 8, 18),
+        //             .symmetric(horizontal: 8.0),
+        //         child: IconButton(
+        //             onPressed: () {
+        //               webViewController.reload();
+        //             },
+        //             icon: Icon(Icons.refresh)),
+        //       )
+        //     ],
+        //   ),
+        // ),
+
+         PreferredSize(
           preferredSize: Size.fromHeight(0),
           child: AppBar(
             backgroundColor: MyColors.kprimaryColor,
@@ -95,27 +119,27 @@ class _Screen1State extends State<Screen1> {
                                     fontSize: 18,
                                   ),
                                 ),
-                                Text(
-                                  'swipe down to refresh',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
+                                // Text(
+                                //   'swipe down to refresh',
+                                //   style: TextStyle(
+                                //     fontSize: 18,
+                                //   ),
+                                // ),
                               ],
                             ),
                           ),
-                          // SizedBox(
-                          //   height: 20,
-                          // ),
-                          // ElevatedButton(
-                          //   style: ElevatedButton.styleFrom(
-                          //     backgroundColor: MyColors.kprimaryColor,
-                          //   ),
-                          //   onPressed: () {
-                          //     refresh();
-                          //   },
-                          //   child: Text('Reload Page'),
-                          // ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: MyColors.kprimaryColor,
+                            ),
+                            onPressed: () {
+                              refresh();
+                            },
+                            child: Text('Reload Page'),
+                          ),
                         ],
                       ),
                     ),
@@ -129,6 +153,7 @@ class _Screen1State extends State<Screen1> {
                     javascriptMode: JavascriptMode.unrestricted,
                     onWebViewCreated: (WebViewController webViewController) {
                       _webViewController.complete(webViewController);
+                      this.webViewController = webViewController;
                     },
                     javascriptChannels: <JavascriptChannel>{
                       // _toasterJavascriptChannel(context),
@@ -187,7 +212,8 @@ class _Screen1State extends State<Screen1> {
                     visible:
                         _isLoading, // Show the progress indicator only when loading
                     child: Center(
-                      child: Lottie.asset('assets/animations/loading.json',height: MediaQuery.of(context).size.height/6),
+                      child: Lottie.asset('assets/animations/loading.json',
+                          height: MediaQuery.of(context).size.height / 1),
 
                       //  CircularPercentIndicator(
                       //   radius: 80.0,
@@ -244,5 +270,4 @@ class _Screen1State extends State<Screen1> {
       });
     }
   }
-
 }

@@ -2,15 +2,14 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:ezeehome_webview/Contrlller/InternetConnectivity.dart';
-import 'package:ezeehome_webview/Static/staticdata.dart';
 import 'package:ezeehome_webview/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_pro/webview_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Screen4 extends StatefulWidget {
-  Screen4({
+class Screen5 extends StatefulWidget {
+  Screen5({
     super.key,
     required this.isInternetConnected,
     required this.link,
@@ -19,10 +18,10 @@ class Screen4 extends StatefulWidget {
   bool isInternetConnected;
   String? link;
   @override
-  State<Screen4> createState() => _Screen4State();
+  State<Screen5> createState() => _Screen5State();
 }
 
-class _Screen4State extends State<Screen4> {
+class _Screen5State extends State<Screen5> {
   var IsInternetConnected = true;
   bool loader = false;
   // final Completer<WebViewController> _controller =
@@ -31,26 +30,11 @@ class _Screen4State extends State<Screen4> {
   double _progress = 0.0; // Variable to hold the progress percentage
   bool _isLoading = true;
 
-  int _progressText = 0;
-
-  var staticLink; // Variable to track loading state
+  int _progressText = 0; // Variable to track loading state
 
   @override
   void initState() {
-        print('idrees rebuild 2');
-
-    staticLink = MyStaticVariable.previousScreenIndex == 0
-        ? '${MyStaticVariable.button1link}'
-        : MyStaticVariable.previousScreenIndex == 1
-            ? '${MyStaticVariable.button2link}'
-            : MyStaticVariable.previousScreenIndex == 2
-                ? '${MyStaticVariable.button3link}'
-                : MyStaticVariable.previousScreenIndex == 4
-                    ? '${MyStaticVariable.button5link}'
-                    : '';
-    print(
-        "i am rebuild agian: ${MyStaticVariable.currentScreenIndex} Previous: ${MyStaticVariable.previousScreenIndex}");
-    // print('stataic::${staticLink} selected ${widget.link}');
+    print('object${widget.link}');
     checkInternetConnectionForDashboard();
     if (Platform.isAndroid) {
       WebView.platform = SurfaceAndroidWebView();
@@ -58,17 +42,9 @@ class _Screen4State extends State<Screen4> {
     // requestPermissions();
     super.initState();
   }
-  void updateLink(String newLink) {
-    setState(() {
-      widget.link = MyStaticVariable.currentScreenIndex == 5
-          ? MyStaticVariable.BookNowButton1link
-          : MyStaticVariable.BookNowButton2link;
-    });
-  }
+
   @override
   Widget build(BuildContext context) {
-    print(
-        "i am rebuild agian: ${MyStaticVariable.currentScreenIndex} Previous: ${MyStaticVariable.previousScreenIndex}");
     return WillPopScope(
       onWillPop: () async {
         bool? goBack =
@@ -84,7 +60,7 @@ class _Screen4State extends State<Screen4> {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(0),
           child: AppBar(
-            backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+            backgroundColor: MyColors.kprimaryColor,
             elevation: 0,
           ),
         ),
@@ -147,10 +123,7 @@ class _Screen4State extends State<Screen4> {
             : Stack(
                 children: [
                   WebView(
-                    initialUrl:
-                        // widget.link == 'null' ?
-                        // staticLink,
-                    widget.link,
+                    initialUrl: widget.link,
                     javascriptMode: JavascriptMode.unrestricted,
                     onWebViewCreated: (WebViewController webViewController) {
                       _webViewController.complete(webViewController);
@@ -208,15 +181,11 @@ class _Screen4State extends State<Screen4> {
                     geolocationEnabled: false,
                     zoomEnabled: true,
                   ),
-                  // widget.link == 'null'
-                  //     ? SizedBox()
-                  //     :
                   Visibility(
                     visible:
                         _isLoading, // Show the progress indicator only when loading
                     child: Center(
-                      child: Lottie.asset('assets/animations/loading.json',
-                          height: MediaQuery.of(context).size.height / 6),
+                      child: Lottie.asset('assets/animations/loading.json',height: MediaQuery.of(context).size.height/6),
 
                       //  CircularPercentIndicator(
                       //   radius: 80.0,
@@ -247,8 +216,6 @@ class _Screen4State extends State<Screen4> {
   //     throw 'Could not launch $url';
   //   }
   // }
-
-
 
   void refresh() {
     setState(() {
