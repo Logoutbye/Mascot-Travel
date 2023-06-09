@@ -1,13 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ezeehome_webview/Contrlller/InternetConnectivity.dart';
 import 'package:ezeehome_webview/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_pro/webview_flutter.dart';
 import 'package:lottie/lottie.dart';
-import 'package:url_launcher/url_launcher.dart';
+
+import '../Static/staticdata.dart';
 
 class Screen1 extends StatefulWidget {
   Screen1({
@@ -30,14 +31,42 @@ class _Screen1State extends State<Screen1> {
   final _webViewController = Completer<WebViewController>();
   double _progress = 0.0; // Variable to hold the progress percentage
   bool _isLoading = true;
-
   int _progressText = 0;
-
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  bool shouldShowPopUp = false;
   late WebViewController webViewController; // Variable to track loading state
+  var staticLink; // Variable to track loading state
 
   @override
   void initState() {
-    print('object${widget.link}');
+
+        fetchPopUpSettings();
+
+ staticLink = MyStaticVariable.currentScreenIndex == 0
+        ? '${MyStaticVariable.button1link}'
+        : MyStaticVariable.currentScreenIndex == 1
+            ? '${MyStaticVariable.button2link}'
+            : MyStaticVariable.previousScreenIndex == 2
+                ? '${MyStaticVariable.button3link}'
+                : MyStaticVariable.previousScreenIndex == 4
+                    ? '${MyStaticVariable.button5link}'
+                    : MyStaticVariable.previousScreenIndex == 5
+                        ? '${MyStaticVariable.BookNowButton1link}'
+                        : MyStaticVariable.previousScreenIndex == 6
+                            ? '${MyStaticVariable.BookNowButton2link}'
+                            : MyStaticVariable.previousScreenIndex == 7
+                                ? '${MyStaticVariable.BookNowButton3link}'
+                                : MyStaticVariable.previousScreenIndex == 8
+                                    ? '${MyStaticVariable.BookNowButton4link}'
+                                    : MyStaticVariable.previousScreenIndex == 9
+                                        ? '${MyStaticVariable.BookNowButton5link}'
+                                        : MyStaticVariable.previousScreenIndex ==10
+                                            ? '${MyStaticVariable.BookNowButton6link}'
+                                            : '';
+
+
+
+    print('index at screen 1::${MyStaticVariable.previousScreenIndex}');
     checkInternetConnectionForDashboard();
     // checkInternetConnection();
     if (Platform.isAndroid) {
@@ -61,29 +90,29 @@ class _Screen1State extends State<Screen1> {
         }
       },
       child: Scaffold(
-        appBar: 
-        // PreferredSize(
-        //   preferredSize: Size.fromHeight(31),
-        //   child: AppBar(
-        //     backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-        //     foregroundColor: Colors.black,
-        //     elevation: 0,
-        //     actions: [
-        //       Padding(
-        //         padding: const EdgeInsets
-        //             // .fromLTRB(8, 0, 8, 18),
-        //             .symmetric(horizontal: 8.0),
-        //         child: IconButton(
-        //             onPressed: () {
-        //               webViewController.reload();
-        //             },
-        //             icon: Icon(Icons.refresh)),
-        //       )
-        //     ],
-        //   ),
-        // ),
+        appBar:
+            // PreferredSize(
+            //   preferredSize: Size.fromHeight(31),
+            //   child: AppBar(
+            //     backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+            //     foregroundColor: Colors.black,
+            //     elevation: 0,
+            //     actions: [
+            //       Padding(
+            //         padding: const EdgeInsets
+            //             // .fromLTRB(8, 0, 8, 18),
+            //             .symmetric(horizontal: 8.0),
+            //         child: IconButton(
+            //             onPressed: () {
+            //               webViewController.reload();
+            //             },
+            //             icon: Icon(Icons.refresh)),
+            //       )
+            //     ],
+            //   ),
+            // ),
 
-         PreferredSize(
+            PreferredSize(
           preferredSize: Size.fromHeight(0),
           child: AppBar(
             backgroundColor: MyColors.kprimaryColor,
@@ -149,7 +178,7 @@ class _Screen1State extends State<Screen1> {
             : Stack(
                 children: [
                   WebView(
-                    initialUrl: widget.link,
+                    initialUrl: staticLink,
                     javascriptMode: JavascriptMode.unrestricted,
                     onWebViewCreated: (WebViewController webViewController) {
                       _webViewController.complete(webViewController);
@@ -270,4 +299,107 @@ class _Screen1State extends State<Screen1> {
       });
     }
   }
+
+    void fetchPopUpSettings() async {
+    final docSnapshot =
+        await firestore.collection('pop_up_settings').doc('admin').get();
+    final popUpSettings = docSnapshot.data();
+
+    final isDailyEnabled = popUpSettings?['daily'] ?? false;
+    final isWeeklyEnabled = popUpSettings?['weekly'] ?? false;
+    final isMonthlyEnabled = popUpSettings?['monthly'] ?? false;
+
+    final currentDate = DateTime.now();
+    final lastPopUpDate = popUpSettings?['lastPopUpDate'] as Timestamp?;
+    final difference =
+        currentDate.difference(lastPopUpDate?.toDate() ?? currentDate);
+
+    setState(() {
+      shouldShowPopUp = (isDailyEnabled && difference.inDays >= 1) ||
+          (isWeeklyEnabled && difference.inDays >= 7) ||
+          (isMonthlyEnabled && difference.inDays >= 30);
+    });
+
+    if (shouldShowPopUp) {
+      showPopUp();
+      saveLastPopUpDate();
+    }
+  }
+
+  void saveLastPopUpDate() async {
+    final currentDate = DateTime.now();
+    final docRef = firestore.collection('pop_up_settings').doc('admin');
+    await docRef.update({'lastPopUpDate': currentDate});
+  }
+
+  void showPopUp() {
+    FirebaseFirestore.instance
+        .collection('popups')
+        .doc(
+            'popup1') // Assuming you have a document with ID 'popup1' containing the pop-up content
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        String title = documentSnapshot['title'];
+        String image = documentSnapshot['image'];
+        String subheading = documentSnapshot['subheading'];
+        String description = documentSnapshot['description'];
+
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(title),
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  image.isNotEmpty
+                      ? Image.network(
+                          image,
+                          height: 150,
+                        )
+                      : SizedBox(),
+                  SizedBox(height: 16),
+                  subheading.isNotEmpty
+                      ? Text(
+                          subheading,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        )
+                      : SizedBox(),
+                  SizedBox(height: 8),
+                  description.isNotEmpty
+                      ? SizedBox(
+                        height: MediaQuery.of(context).size.height/10,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          physics: BouncingScrollPhysics(),
+                          child: Text(
+                              description,
+                              style: TextStyle(color: Color.fromARGB(255, 91, 91, 91),fontSize: 15),
+                              textAlign: TextAlign.start,
+                            ),
+                        ),
+                      )
+                      : SizedBox(),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  child: Text('Close'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    });
+  }
+
 }

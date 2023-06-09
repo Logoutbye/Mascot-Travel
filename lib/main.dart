@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ezeehome_webview/Contrlller/InternetConnectivity.dart';
 import 'package:ezeehome_webview/Screens/bottom_navigation_bar.dart';
 import 'package:ezeehome_webview/Static/staticdata.dart';
-import 'package:ezeehome_webview/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -12,6 +12,7 @@ void main() async {
 
   // firebase intialization
   await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(firebaseOnBackgroundMessage);
 
   await checkInternetConnectionForDashboard();
 
@@ -21,6 +22,15 @@ void main() async {
   ));
   await fetchData();
   runApp(MyApp());
+}
+
+Future<void> firebaseOnBackgroundMessage(RemoteMessage message) async {
+  try {
+    print("Firebase onBgMsg ${message.notification?.title}");
+    print("Firebase onBgMsg ${message.notification?.body}");
+  } catch (e) {
+    print("Firebase onBgMsg ${e.toString()}");
+  }
 }
 
 var isInternetConnected = false;
@@ -113,13 +123,37 @@ Future<void> fetchData() async {
   }
 }
 
-class MyApp extends StatelessWidget {
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+// //use this to get start of the screen
+// navigatorKey.currentState.push(
+//   MaterialPageRoute(
+//     builder: (context) => NextScreen(),
+//   ),
+// );
+class MyApp extends StatefulWidget {
   MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+    firebaseMessaging.getToken().then((value) {
+      print("FirebaseMessagingtoken ::${value}");
+    });
+    super.initState();
+  }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
         title: 'Mascot Travel',
         theme: ThemeData(
@@ -127,28 +161,6 @@ class MyApp extends StatelessWidget {
         ),
         home: FirstScreen(
           isInternetConnected: isInternetConnected,
-          // button1label: _button1label,
-          // button1link: _button1link,
-          // button2label: _button2label,
-          // button2link: _button2link,
-          // button3label: _button3label,
-          // button3link: _button3link,
-          // button4label: _button4label,
-          // button4link: _button4link,
-          // button5label: _button5label,
-          // button5link: _button5link,
-          // giveBookNowButton1label: _BookNowButton1label,
-          // giveBookNowButton1link: _BookNowButton1link,
-          // giveBookNowButton2label: _BookNowButton2label,
-          // giveBookNowButton2link: _BookNowButton2link,
-          // giveBookNowButton3label: _BookNowButton3label,
-          // giveBookNowButton3link: _BookNowButton3link,
-          // giveBookNowButton4label: _BookNowButton4label,
-          // giveBookNowButton4link: _BookNowButton4link,
-          // giveBookNowButton5label: _BookNowButton5label,
-          // giveBookNowButton5link: _BookNowButton5link,
-          // giveBookNowButton6label: _BookNowButton6label,
-          // giveBookNowButton6link: _BookNowButton6link,
         ));
   }
 }

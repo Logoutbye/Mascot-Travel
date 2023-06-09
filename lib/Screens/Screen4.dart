@@ -7,17 +7,14 @@ import 'package:ezeehome_webview/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_pro/webview_flutter.dart';
 import 'package:lottie/lottie.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class Screen4 extends StatefulWidget {
   Screen4({
     super.key,
     required this.isInternetConnected,
-    required this.link,
   }) {}
 
   bool isInternetConnected;
-  String? link;
   @override
   State<Screen4> createState() => _Screen4State();
 }
@@ -45,9 +42,21 @@ class _Screen4State extends State<Screen4> {
                 ? '${MyStaticVariable.button3link}'
                 : MyStaticVariable.previousScreenIndex == 4
                     ? '${MyStaticVariable.button5link}'
-                    : '';
+                    : MyStaticVariable.previousScreenIndex == 5
+                        ? '${MyStaticVariable.BookNowButton1link}'
+                        : MyStaticVariable.previousScreenIndex == 6
+                            ? '${MyStaticVariable.BookNowButton2link}'
+                            : MyStaticVariable.previousScreenIndex == 7
+                                ? '${MyStaticVariable.BookNowButton3link}'
+                                : MyStaticVariable.previousScreenIndex == 8
+                                    ? '${MyStaticVariable.BookNowButton4link}'
+                                    : MyStaticVariable.previousScreenIndex == 9
+                                        ? '${MyStaticVariable.BookNowButton5link}'
+                                        : MyStaticVariable.previousScreenIndex ==10
+                                            ? '${MyStaticVariable.BookNowButton6link}'
+                                            : '';
+                                            print('index at screen 4::${MyStaticVariable.previousScreenIndex}');
 
-                    print('stataic::${staticLink} selected ${widget.link}');
     checkInternetConnectionForDashboard();
     if (Platform.isAndroid) {
       WebView.platform = SurfaceAndroidWebView();
@@ -137,7 +146,9 @@ class _Screen4State extends State<Screen4> {
                 children: [
                   WebView(
                     initialUrl:
-                        widget.link == 'null' ? staticLink : widget.link,
+                        // widget.link == 'null' ?
+                        staticLink,
+                    //  : widget.link,
                     javascriptMode: JavascriptMode.unrestricted,
                     onWebViewCreated: (WebViewController webViewController) {
                       _webViewController.complete(webViewController);

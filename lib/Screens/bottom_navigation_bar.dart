@@ -1,7 +1,4 @@
-import 'dart:math';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ezeehome_webview/Screens/build_sheet_for_book_now.dart';
 import 'package:ezeehome_webview/Screens/screen1.dart';
 import 'package:ezeehome_webview/Screens/Screen4.dart';
 import 'package:ezeehome_webview/Screens/screen2.dart';
@@ -96,35 +93,10 @@ class _FirstScreenState extends State<FirstScreen> {
 
   var IsInternetConnected = true;
 
-  var _selectedLink;
+  // var _selectedLink;
 
-  var _index;
   @override
   void initState() {
-    // _button1label = widget.button1label;
-    // // _button1link = widget.button1link;
-    // _button2label = widget.button2label;
-    // _button2link = widget.button2link;
-    // _button3label = widget.button3label;
-    // _button3link = widget.button3link;
-    // _button4label = widget.button4label;
-    // _button4link = widget.button4link;
-    // _button5label = widget.button5label;
-    // _button5link = widget.button5link;
-    // _booknowbutton1label = widget.giveBookNowButton1label;
-    // _booknowbutton1link = widget.giveBookNowButton1link;
-    // _booknowbutton2label = widget.giveBookNowButton2label;
-    // _booknowbutton2link = widget.giveBookNowButton2link;
-    // _booknowbutton3label = widget.giveBookNowButton3label;
-    // _booknowbutton3link = widget.giveBookNowButton3link;
-    // _booknowbutton4label = widget.giveBookNowButton4label;
-    // _booknowbutton4link = widget.giveBookNowButton4link;
-    // _booknowbutton5label = widget.giveBookNowButton5label;
-    // _booknowbutton5link = widget.giveBookNowButton5link;
-    // _booknowbutton6label = widget.giveBookNowButton6label;
-    // _booknowbutton6link = widget.giveBookNowButton6link;
-    print('check${_selectedLink}');
-    // fetchData();
     alpha();
 
     // TODO: implement initState
@@ -149,13 +121,12 @@ class _FirstScreenState extends State<FirstScreen> {
       ),
       Screen4(
         isInternetConnected: isInternetConnected,
-        link: 'null',
       ),
       Screen5(
           isInternetConnected: isInternetConnected,
           link: '${MyStaticVariable.button5link}')
     ];
-    print("objectobjectobject$_index");
+    print("objectobjectobject$index");
   }
 
   // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -176,7 +147,7 @@ class _FirstScreenState extends State<FirstScreen> {
             indicatorColor: Colors.transparent),
         child: NavigationBar(
             backgroundColor: MyColors.kprimaryshade,
-            selectedIndex: index,
+            selectedIndex: MyStaticVariable.previousScreenIndex > 4 ? 3 : index,
             labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
             animationDuration: Duration(seconds: 2),
             onDestinationSelected: (index) => setState(() {
@@ -187,6 +158,15 @@ class _FirstScreenState extends State<FirstScreen> {
                     _openModalSheet(context);
                   }
 
+                  if (index == 0) {
+                    setState(() {
+                      navigatorKey.currentState!
+                          .popUntil((route) => route.isFirst);
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => FirstScreen(
+                              isInternetConnected: isInternetConnected)));
+                    });
+                  }
                   print(
                       'Print my index ${MyStaticVariable.previousScreenIndex}');
                 }),
@@ -264,11 +244,12 @@ class _FirstScreenState extends State<FirstScreen> {
                 title: Text('${MyStaticVariable.BookNowButton1label}'),
                 onTap: () {
                   setState(() {
-                    Navigator.pop(context);
-                    Navigator.of(context).push(MaterialPageRoute(
+                    MyStaticVariable.setData(5, 5);
+                    navigatorKey.currentState!
+                        .popUntil((route) => route.isFirst);
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
                         builder: (context) => FirstScreen(
                             isInternetConnected: isInternetConnected)));
-                    MyStaticVariable.setData(5, 5);
                   });
                 },
               ),
@@ -278,15 +259,13 @@ class _FirstScreenState extends State<FirstScreen> {
                 title: Text('${MyStaticVariable.BookNowButton2label}'),
                 onTap: () {
                   setState(() {
-                    _selectedLink = MyStaticVariable.BookNowButton2link;
-                    // isInternetConnected =true;
-                    // alpha();
+                    MyStaticVariable.setData(5, 6);
+                    navigatorKey.currentState!
+                        .popUntil((route) => route.isFirst);
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => FirstScreen(
+                            isInternetConnected: isInternetConnected)));
                   });
-                  // Navigator.pop(context);
-                  // Navigator.of(context).push(MaterialPageRoute(
-                  //     builder: (context) => Screen4(
-                  //         isInternetConnected: isInternetConnected,
-                  //         link: _selectedLink)));
                 },
               ),
               Divider(),
@@ -295,15 +274,13 @@ class _FirstScreenState extends State<FirstScreen> {
                 title: Text('${MyStaticVariable.BookNowButton3label}'),
                 onTap: () {
                   setState(() {
-                    _selectedLink = MyStaticVariable.BookNowButton3link;
-                    // isInternetConnected =true;
-                    // alpha();
+                    MyStaticVariable.setData(5, 7);
+                    navigatorKey.currentState!
+                        .popUntil((route) => route.isFirst);
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => FirstScreen(
+                            isInternetConnected: isInternetConnected)));
                   });
-                  // Navigator.pop(context);
-                  // Navigator.of(context).push(MaterialPageRoute(
-                  //     builder: (context) => Screen4(
-                  //         isInternetConnected: isInternetConnected,
-                  //         link: _selectedLink)));
                 },
               ),
               Divider(),
@@ -312,15 +289,13 @@ class _FirstScreenState extends State<FirstScreen> {
                 title: Text('${MyStaticVariable.BookNowButton4label}'),
                 onTap: () {
                   setState(() {
-                    _selectedLink = MyStaticVariable.BookNowButton4link;
-                    // isInternetConnected =true;
-                    // alpha();
+                    MyStaticVariable.setData(5, 8);
+                    navigatorKey.currentState!
+                        .popUntil((route) => route.isFirst);
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => FirstScreen(
+                            isInternetConnected: isInternetConnected)));
                   });
-                  // Navigator.pop(context);
-                  // Navigator.of(context).push(MaterialPageRoute(
-                  //     builder: (context) => Screen4(
-                  //         isInternetConnected: isInternetConnected,
-                  //         link: _selectedLink)));
                 },
               ),
               Divider(),
@@ -329,15 +304,13 @@ class _FirstScreenState extends State<FirstScreen> {
                 title: Text('${MyStaticVariable.BookNowButton5label}'),
                 onTap: () {
                   setState(() {
-                    _selectedLink = MyStaticVariable.BookNowButton5link;
-                    // isInternetConnected =true;
-                    // alpha();
+                    MyStaticVariable.setData(5, 9);
+                    navigatorKey.currentState!
+                        .popUntil((route) => route.isFirst);
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => FirstScreen(
+                            isInternetConnected: isInternetConnected)));
                   });
-                  // Navigator.pop(context);
-                  // Navigator.of(context).push(MaterialPageRoute(
-                  //     builder: (context) => Screen4(
-                  //         isInternetConnected: isInternetConnected,
-                  //         link: _selectedLink)));
                 },
               ),
               Divider(),
@@ -349,25 +322,16 @@ class _FirstScreenState extends State<FirstScreen> {
                 title: Text('${MyStaticVariable.BookNowButton6label}'),
                 onTap: () {
                   setState(() {
-                    _selectedLink = MyStaticVariable.BookNowButton6link;
-                    // isInternetConnected =true;
-                    // alpha();
+                    MyStaticVariable.setData(5, 10);
+                    navigatorKey.currentState!
+                        .popUntil((route) => route.isFirst);
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => FirstScreen(
+                            isInternetConnected: isInternetConnected)));
                   });
-                  // Navigator.pop(context);
-                  // Navigator.of(context).push(MaterialPageRoute(
-                  //     builder: (context) => Screen4(
-                  //         isInternetConnected: isInternetConnected,
-                  //         link: _selectedLink)));
                 },
               ),
               Divider(),
-              // ListTile(
-              //   leading: Icon(Icons.close),
-              //   title: Text('Close'),
-              //   onTap: () {
-              //     Navigator.of(context).pop();
-              //   },
-              // ),
             ],
           ),
         );
