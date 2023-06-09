@@ -7,6 +7,7 @@ import 'package:ezeehome_webview/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_pro/webview_flutter.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Static/staticdata.dart';
 
@@ -32,17 +33,20 @@ class _Screen1State extends State<Screen1> {
   double _progress = 0.0; // Variable to hold the progress percentage
   bool _isLoading = true;
   int _progressText = 0;
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  late SharedPreferences prefs;
+
   bool shouldShowPopUp = false;
   late WebViewController webViewController; // Variable to track loading state
   var staticLink; // Variable to track loading state
 
   @override
   void initState() {
+    initializePreferences();
 
-        fetchPopUpSettings();
+    fetchPopUpSettings();
 
- staticLink = MyStaticVariable.currentScreenIndex == 0
+    staticLink = MyStaticVariable.currentScreenIndex == 0
         ? '${MyStaticVariable.button1link}'
         : MyStaticVariable.currentScreenIndex == 1
             ? '${MyStaticVariable.button2link}'
@@ -60,11 +64,11 @@ class _Screen1State extends State<Screen1> {
                                     ? '${MyStaticVariable.BookNowButton4link}'
                                     : MyStaticVariable.previousScreenIndex == 9
                                         ? '${MyStaticVariable.BookNowButton5link}'
-                                        : MyStaticVariable.previousScreenIndex ==10
+                                        : MyStaticVariable
+                                                    .previousScreenIndex ==
+                                                10
                                             ? '${MyStaticVariable.BookNowButton6link}'
                                             : '';
-
-
 
     print('index at screen 1::${MyStaticVariable.previousScreenIndex}');
     checkInternetConnectionForDashboard();
@@ -300,7 +304,7 @@ class _Screen1State extends State<Screen1> {
     }
   }
 
-    void fetchPopUpSettings() async {
+  void fetchPopUpSettings() async {
     final docSnapshot =
         await firestore.collection('pop_up_settings').doc('admin').get();
     final popUpSettings = docSnapshot.data();
@@ -308,11 +312,11 @@ class _Screen1State extends State<Screen1> {
     final isDailyEnabled = popUpSettings?['daily'] ?? false;
     final isWeeklyEnabled = popUpSettings?['weekly'] ?? false;
     final isMonthlyEnabled = popUpSettings?['monthly'] ?? false;
-
     final currentDate = DateTime.now();
-    final lastPopUpDate = popUpSettings?['lastPopUpDate'] as Timestamp?;
-    final difference =
-        currentDate.difference(lastPopUpDate?.toDate() ?? currentDate);
+    final lastPopUpDateMillis = prefs.getInt('lastPopUpDate') ?? 0;
+    final lastPopUpDate =
+        DateTime.fromMillisecondsSinceEpoch(lastPopUpDateMillis);
+    final difference = currentDate.difference(lastPopUpDate);
 
     setState(() {
       shouldShowPopUp = (isDailyEnabled && difference.inDays >= 1) ||
@@ -326,10 +330,14 @@ class _Screen1State extends State<Screen1> {
     }
   }
 
-  void saveLastPopUpDate() async {
-    final currentDate = DateTime.now();
-    final docRef = firestore.collection('pop_up_settings').doc('admin');
-    await docRef.update({'lastPopUpDate': currentDate});
+  void initializePreferences() async {
+    prefs = await SharedPreferences.getInstance();
+    firestore = FirebaseFirestore.instance;
+  }
+
+  void saveLastPopUpDate() {
+    final currentDateMillis = DateTime.now().millisecondsSinceEpoch;
+    prefs.setInt('lastPopUpDate', currentDateMillis);
   }
 
   void showPopUp() {
@@ -373,17 +381,19 @@ class _Screen1State extends State<Screen1> {
                   SizedBox(height: 8),
                   description.isNotEmpty
                       ? SizedBox(
-                        height: MediaQuery.of(context).size.height/10,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          physics: BouncingScrollPhysics(),
-                          child: Text(
+                          height: MediaQuery.of(context).size.height / 10,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            physics: BouncingScrollPhysics(),
+                            child: Text(
                               description,
-                              style: TextStyle(color: Color.fromARGB(255, 91, 91, 91),fontSize: 15),
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 91, 91, 91),
+                                  fontSize: 15),
                               textAlign: TextAlign.start,
                             ),
-                        ),
-                      )
+                          ),
+                        )
                       : SizedBox(),
                 ],
               ),
@@ -401,5 +411,4 @@ class _Screen1State extends State<Screen1> {
       }
     });
   }
-
 }
