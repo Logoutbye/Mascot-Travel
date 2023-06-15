@@ -402,6 +402,7 @@ class _Screen1State extends State<Screen1> {
                   child: Text('Close'),
                   onPressed: () {
                     Navigator.of(context).pop();
+                    
                   },
                 ),
               ],

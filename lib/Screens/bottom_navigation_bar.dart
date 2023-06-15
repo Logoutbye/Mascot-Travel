@@ -1,4 +1,3 @@
-
 import 'package:ezeehome_webview/Screens/screen1.dart';
 import 'package:ezeehome_webview/Screens/Screen4.dart';
 import 'package:ezeehome_webview/Screens/screen2.dart';
@@ -7,60 +6,16 @@ import 'package:ezeehome_webview/Screens/screen5.dart';
 import 'package:ezeehome_webview/Static/staticdata.dart';
 import 'package:ezeehome_webview/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
+import '../Contrlller/slide_transition_page.dart';
 import '../main.dart';
 
 class FirstScreen extends StatefulWidget {
   bool isInternetConnected;
-
-  // String? button1link;
-  // String? button1label;
-  // String? button2link;
-  // String? button2label;
-  // String? button3link;
-  // String? button3label;
-  // String? button4link;
-  // String? button4label;
-  // String? button5link;
-  // String? button5label;
-  // String? giveBookNowButton1link;
-  // String? giveBookNowButton1label;
-  // String? giveBookNowButton2link;
-  // String? giveBookNowButton2label;
-  // String? giveBookNowButton3link;
-  // String? giveBookNowButton3label;
-  // String? giveBookNowButton4link;
-  // String? giveBookNowButton4label;
-  // String? giveBookNowButton5link;
-  // String? giveBookNowButton5label;
-  // String? giveBookNowButton6link;
-  // String? giveBookNowButton6label;
-
   FirstScreen({
     super.key,
     required this.isInternetConnected,
-    // required this.button1label,
-    // required this.button1link,
-    // required this.button2label,
-    // required this.button2link,
-    // required this.button3label,
-    // required this.button3link,
-    // required this.button4label,
-    // required this.button4link,
-    // required this.button5label,
-    // required this.button5link,
-    // required this.giveBookNowButton1link,
-    // required this.giveBookNowButton1label,
-    // required this.giveBookNowButton2link,
-    // required this.giveBookNowButton2label,
-    // required this.giveBookNowButton3link,
-    // required this.giveBookNowButton3label,
-    // required this.giveBookNowButton4link,
-    // required this.giveBookNowButton4label,
-    // required this.giveBookNowButton5link,
-    // required this.giveBookNowButton5label,
-    // required this.giveBookNowButton6link,
-    // required this.giveBookNowButton6label
   });
 
   @override
@@ -68,29 +23,6 @@ class FirstScreen extends StatefulWidget {
 }
 
 class _FirstScreenState extends State<FirstScreen> {
-  // String? _button1link;
-  // String? _button1label;
-  // String? _button2link;
-  // String? _button2label;
-  // String? _button3link;
-  // String? _button3label;
-  // String? _button4link;
-  // String? _button4label;
-  // String? _button5link;
-  // String? _button5label;
-  // String? _booknowbutton1link;
-  // String? _booknowbutton1label;
-  // String? _booknowbutton2link;
-  // String? _booknowbutton2label;
-  // String? _booknowbutton3link;
-  // String? _booknowbutton3label;
-  // String? _booknowbutton4link;
-  // String? _booknowbutton4label;
-  // String? _booknowbutton5link;
-  // String? _booknowbutton5label;
-  // String? _booknowbutton6link;
-  // String? _booknowbutton6label;
-
   var IsInternetConnected = true;
 
   // var _selectedLink;
@@ -152,19 +84,33 @@ class _FirstScreenState extends State<FirstScreen> {
             animationDuration: Duration(seconds: 2),
             onDestinationSelected: (index) => setState(() {
                   MyStaticVariable.setData(index, this.index);
-                  this.index = index;
+                  if (index != 3) {
+                    this.index = index;
+                  }
 
                   if (index == 3) {
                     _openModalSheet(context);
+                    print('here');
+
+                   
                   }
 
                   if (index == 0) {
                     setState(() {
                       navigatorKey.currentState!
                           .popUntil((route) => route.isFirst);
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => FirstScreen(
-                              isInternetConnected: isInternetConnected)));
+
+                      Navigator.pushReplacement(
+                        context,
+                        SlideTransitionPage(
+                            applySlideTransition: false,
+                            page: FirstScreen(
+                              isInternetConnected: isInternetConnected,
+                            )),
+                      );
+                      // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      //     builder: (context) => FirstScreen(
+                      //         isInternetConnected: isInternetConnected)));
                     });
                   }
                   print(

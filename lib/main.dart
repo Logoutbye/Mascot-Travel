@@ -6,13 +6,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+ // Request notification permission
+  await requestNotificationPermission();
 
   // firebase intialization
   await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(firebaseOnBackgroundMessage);
 
   await checkInternetConnectionForDashboard();
 
@@ -21,8 +23,34 @@ void main() async {
     statusBarColor: Colors.white,
   ));
   await fetchData();
+  // requestCameraPermission();
+
   runApp(MyApp());
 }
+requestNotificationPermission() async {
+  PermissionStatus status = await Permission.notification.request();
+
+  if (status.isGranted) {
+    // Permission granted, you can now access notifications
+    print('Notification permission granted');
+  } else {
+    // Permission denied
+    print('Notification permission denied');
+  }
+}
+
+
+// void requestCameraPermission() async {
+//   PermissionStatus status = await Permission.camera.request();
+
+//   if (status.isGranted) {
+//     // Permission granted, you can now access the camera
+//     print('here granted');
+//   } else {
+//     // Permission denied
+//     print('here denied');
+//   }
+// }
 
 Future<void> firebaseOnBackgroundMessage(RemoteMessage message) async {
   try {
@@ -138,15 +166,33 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-
 class _MyAppState extends State<MyApp> {
+  FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+
   @override
   void initState() {
-    FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
     firebaseMessaging.getToken().then((value) {
       print("FirebaseMessagingtoken ::${value}");
     });
+    initializeFirebaseMessaging();
+    FirebaseMessaging.onBackgroundMessage(firebaseOnBackgroundMessage);
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Foreground message received: ${message.notification?.title}');
+      // Handle the foreground message here
+      // You can show a dialog, update the app UI, or perform any required action
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('Notification clicked!');
+      // Handle the notification click event here
+      // You can navigate to a specific screen or perform any required action
+    });
+
     super.initState();
+  }
+
+  Future<void> initializeFirebaseMessaging() async {
+    // Request permission to receive notifications
+    await firebaseMessaging.requestPermission();
   }
 
   // This widget is the root of your application.
